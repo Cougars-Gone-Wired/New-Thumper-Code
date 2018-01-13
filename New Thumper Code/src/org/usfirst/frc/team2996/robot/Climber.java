@@ -1,6 +1,6 @@
 package org.usfirst.frc.team2996.robot;
 
-import com.ctre.CANTalon;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.Joystick;
 
@@ -8,7 +8,7 @@ public class Climber {
 
 	// object declarations
 	private Joystick mobilityStick;
-	private CANTalon climberMotor;
+	private WPI_TalonSRX climberMotor;
 
 	public Climber(Robot robot) {
 		// assigning local variable to variable in robot class

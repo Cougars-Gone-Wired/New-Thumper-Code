@@ -1,6 +1,6 @@
 package org.usfirst.frc.team2996.robot;
 
-import com.ctre.CANTalon;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -9,8 +9,8 @@ public class Shooter {
 
 	// object declarations
 	private Joystick manipulatorStick;
-	private CANTalon shooterMotor;
-	private CANTalon augerMotor;
+	private WPI_TalonSRX shooterMotor;
+	private WPI_TalonSRX augerMotor;
 
 	public Shooter(Robot robot) {
 		// assigning local variables to variables in the robot class

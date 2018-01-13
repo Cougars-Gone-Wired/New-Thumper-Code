@@ -3,13 +3,15 @@ package org.usfirst.frc.team2996.robot;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import com.ctre.CANTalon;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 
 /**
@@ -82,14 +84,18 @@ public class Robot extends IterativeRobot {
 	Toggle driveSwitchButton;
 	
 	//motor controller object declarations
-	CANTalon intakeMotor;
-	CANTalon shooterMotor;
-	CANTalon augerMotor;
-	CANTalon climberMotor;
-	CANTalon frontLeftMotor;
-	CANTalon rearLeftMotor;
-	CANTalon frontRightMotor;
-	CANTalon rearRightMotor;
+	WPI_TalonSRX intakeMotor;
+	WPI_TalonSRX shooterMotor;
+	WPI_TalonSRX augerMotor;
+	WPI_TalonSRX climberMotor;
+	
+	WPI_TalonSRX frontLeftMotor;
+	WPI_TalonSRX rearLeftMotor;
+	SpeedControllerGroup leftMotors;
+	
+	WPI_TalonSRX frontRightMotor;
+	WPI_TalonSRX rearRightMotor;
+	SpeedControllerGroup rightMotors;
 	
 	//motor controller object declarations
 	Solenoid gearPanSolenoid;
@@ -99,7 +105,8 @@ public class Robot extends IterativeRobot {
 	Solenoid rearRightSolenoid;
 	
 	//other object declarations
-	RobotDrive robotDrive;
+	DifferentialDrive differentialDrive;
+	MecanumDrive mecanumDrive;
 	AHRS gyro;
 	
 	//project class declarations
@@ -140,14 +147,18 @@ public class Robot extends IterativeRobot {
 		driveSwitchButton = new Toggle(mobilityStick, DRIVE_SWITCH_BUTTON);
 		
 		//motor controller instantiations
-		intakeMotor = new CANTalon(INTAKE_MOTOR_PORT);
-		shooterMotor = new CANTalon(SHOOTER_MOTOR_PORT);
-		augerMotor = new CANTalon(AUGER_MOTOR_PORT);
-		climberMotor = new CANTalon(CLIMBER_MOTOR_PORT);
-		frontLeftMotor = new CANTalon(FRONT_LEFT_MOTOR_PORT);
-		rearLeftMotor = new CANTalon(REAR_LEFT_MOTOR_PORT);
-		frontRightMotor = new CANTalon(FRONT_RIGHT_MOTOR_PORT);
-		rearRightMotor = new CANTalon(REAR_LEFT_MOTOR_PORT);
+		intakeMotor = new WPI_TalonSRX(INTAKE_MOTOR_PORT);
+		shooterMotor = new WPI_TalonSRX(SHOOTER_MOTOR_PORT);
+		augerMotor = new WPI_TalonSRX(AUGER_MOTOR_PORT);
+		climberMotor = new WPI_TalonSRX(CLIMBER_MOTOR_PORT);
+		
+		frontLeftMotor = new WPI_TalonSRX(FRONT_LEFT_MOTOR_PORT);
+		rearLeftMotor = new WPI_TalonSRX(REAR_LEFT_MOTOR_PORT);
+		leftMotors = new SpeedControllerGroup(frontLeftMotor, rearLeftMotor);
+		
+		frontRightMotor = new WPI_TalonSRX(FRONT_RIGHT_MOTOR_PORT);
+		rearRightMotor = new WPI_TalonSRX(REAR_LEFT_MOTOR_PORT);
+		rightMotors = new SpeedControllerGroup(frontRightMotor, rearLeftMotor);
 		
 		//solenoid instantiations
 		gearPanSolenoid = new Solenoid(GEAR_PAN_SOLENOID_PORT);
@@ -157,7 +168,8 @@ public class Robot extends IterativeRobot {
 		rearRightSolenoid = new Solenoid(REAR_RIGHT_SOLENOID_PORT);
 		
 		//other instantiations
-		robotDrive = new RobotDrive(frontLeftMotor, rearLeftMotor, frontRightMotor, rearRightMotor);
+		differentialDrive = new DifferentialDrive(leftMotors, rightMotors);
+		mecanumDrive = new MecanumDrive(frontLeftMotor, rearLeftMotor, frontRightMotor, rearRightMotor);
 		gyro = new AHRS(SPI.Port.kMXP);
 		
 		//project class instantiations
@@ -202,7 +214,7 @@ public class Robot extends IterativeRobot {
 		
 		//reseting things for auto
 		gyro.zeroYaw();
-		autonomousMethods.encoderReset();
+//		autonomousMethods.encoderReset();
 		drive.arcadeDrive(); //so that we start on colsons
 	}
 
@@ -379,44 +391,48 @@ public class Robot extends IterativeRobot {
 		return driveSwitchButton;
 	}
 
-	public CANTalon getIntakeMotor() {
+	public WPI_TalonSRX getIntakeMotor() {
 		return intakeMotor;
+	}
+
+	public WPI_TalonSRX getShooterMotor() {
+		return shooterMotor;
+	}
+
+	public WPI_TalonSRX getAugerMotor() {
+		return augerMotor;
+	}
+
+	public WPI_TalonSRX getClimberMotor() {
+		return climberMotor;
+	}
+
+	public WPI_TalonSRX getFrontLeftMotor() {
+		return frontLeftMotor;
+	}
+
+	public WPI_TalonSRX getRearLeftMotor() {
+		return rearLeftMotor;
+	}
+
+	public WPI_TalonSRX getFrontRightMotor() {
+		return frontRightMotor;
+	}
+
+	public WPI_TalonSRX getRearRightMotor() {
+		return rearRightMotor;
+	}
+
+	public DifferentialDrive getDifferentialDrive() {
+		return differentialDrive;
+	}
+
+	public MecanumDrive getMecanumDrive() {
+		return mecanumDrive;
 	}
 
 	public Solenoid getGearPanSolenoid() {
 		return gearPanSolenoid;
-	}
-
-	public CANTalon getShooterMotor() {
-		return shooterMotor;
-	}
-
-	public CANTalon getAugerMotor() {
-		return augerMotor;
-	}
-
-	public CANTalon getClimberMotor() {
-		return climberMotor;
-	}
-
-	public RobotDrive getRobotDrive() {
-		return robotDrive;
-	}
-
-	public CANTalon getFrontLeftMotor() {
-		return frontLeftMotor;
-	}
-
-	public CANTalon getRearLeftMotor() {
-		return rearLeftMotor;
-	}
-
-	public CANTalon getFrontRightMotor() {
-		return frontRightMotor;
-	}
-
-	public CANTalon getRearRightMotor() {
-		return rearRightMotor;
 	}
 
 	public Solenoid getFrontLeftSolenoid() {
