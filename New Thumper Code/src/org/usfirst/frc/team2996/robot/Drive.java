@@ -37,11 +37,11 @@ public class Drive {
 		this.rearRightSolenoid = robot.getRearRightSolenoid();
 
 		// assigning local variables to hold the values of stick axes
-		arcadeYaxisValue = mobilityStick.getRawAxis(Robot.ARCADE_DRIVE_Y_AXIS);
-		arcadeRotateAxisValue = mobilityStick.getRawAxis(Robot.ARCADE_DRIVE_ROTATE_AXIS);
-		mecanumXaxisValue = mobilityStick.getRawAxis(Robot.MECANUM_DRIVE_X_AXIS);
-		mecanumYaxisValue = mobilityStick.getRawAxis(Robot.MECANUM_DRIVE_Y_AXIS);
-		mecanumRotateAxisValue = mobilityStick.getRawAxis(Robot.MECANUM_DRIVE_ROTATE_AXIS);
+		arcadeYaxisValue = robot.getArcadeDriveYAxis();
+		arcadeRotateAxisValue = robot.getArcadeDriveRotateAxis();
+		mecanumXaxisValue = robot.getMecanumDriveXAxis();
+		mecanumYaxisValue = robot.getMecanumDriveYAxis();
+		mecanumRotateAxisValue = robot.getMecanumDriveRotateAxis();
 	}
 
 	// method to set the drive solenoids - false is default position - true is

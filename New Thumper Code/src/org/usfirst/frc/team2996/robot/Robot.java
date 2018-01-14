@@ -81,6 +81,11 @@ public class Robot extends IterativeRobot {
 	
 	//mobility stick object declarations
 	Joystick mobilityStick;
+	double arcadeDriveYAxis;
+	double arcadeDriveRotateAxis;
+	double mecanumDriveYAxis;
+	double mecanumDriveXAxis;
+	double mecanumDriveRotateAxis;
 	Toggle driveSwitchButton;
 	
 	//motor controller object declarations
@@ -135,7 +140,6 @@ public class Robot extends IterativeRobot {
 		//Robot class method calls
 		displaySettings();
 		setConstants();
-		setInverts();
 		
 		
 		//manipulator stick instantiations
@@ -144,6 +148,11 @@ public class Robot extends IterativeRobot {
 		
 		//mobility stick instantiations
 		mobilityStick = new Joystick(MOBILITY_STICK_PORT);
+		arcadeDriveYAxis = DeadZone.deadZone(mobilityStick.getRawAxis(ARCADE_DRIVE_Y_AXIS));
+		arcadeDriveRotateAxis = DeadZone.deadZone(mobilityStick.getRawAxis(ARCADE_DRIVE_ROTATE_AXIS));
+		mecanumDriveYAxis = DeadZone.deadZone(mobilityStick.getRawAxis(MECANUM_DRIVE_Y_AXIS));
+		mecanumDriveXAxis = DeadZone.deadZone(mobilityStick.getRawAxis(MECANUM_DRIVE_X_AXIS));
+		mecanumDriveRotateAxis = DeadZone.deadZone(mobilityStick.getRawAxis(MECANUM_DRIVE_ROTATE_AXIS));
 		driveSwitchButton = new Toggle(mobilityStick, DRIVE_SWITCH_BUTTON);
 		
 		//motor controller instantiations
@@ -179,6 +188,8 @@ public class Robot extends IterativeRobot {
 		drive = new Drive(this);
 		autonomousMethods = new AutonomousMethods(this);
 		autonomousPrograms = new AutonomousPrograms(this);
+		
+		setInverts();
 	}
 
 	/**
@@ -357,11 +368,11 @@ public class Robot extends IterativeRobot {
 
 	public void setInverts() {
 		//stick axis inverts (- means inverted)
-		ARCADE_DRIVE_Y_AXIS = -ARCADE_DRIVE_Y_AXIS;
-		ARCADE_DRIVE_ROTATE_AXIS = -ARCADE_DRIVE_ROTATE_AXIS;
-		MECANUM_DRIVE_Y_AXIS = -MECANUM_DRIVE_Y_AXIS;
-		MECANUM_DRIVE_X_AXIS = MECANUM_DRIVE_X_AXIS; //here for completion purposes
-		MECANUM_DRIVE_ROTATE_AXIS = -MECANUM_DRIVE_ROTATE_AXIS;
+		arcadeDriveYAxis = arcadeDriveYAxis * -1;
+		arcadeDriveRotateAxis = arcadeDriveRotateAxis * -1;
+		mecanumDriveYAxis = mecanumDriveYAxis * -1;
+		mecanumDriveXAxis = mecanumDriveXAxis * 1;
+		mecanumDriveRotateAxis = mecanumDriveRotateAxis * -1;
 		
 		//motor controller voltage inverts
 		intakeMotor.setInverted(true);
@@ -385,6 +396,26 @@ public class Robot extends IterativeRobot {
 
 	public Joystick getMobilityStick() {
 		return mobilityStick;
+	}
+
+	public double getArcadeDriveYAxis() {
+		return arcadeDriveYAxis;
+	}
+
+	public double getArcadeDriveRotateAxis() {
+		return arcadeDriveRotateAxis;
+	}
+
+	public double getMecanumDriveYAxis() {
+		return mecanumDriveYAxis;
+	}
+
+	public double getMecanumDriveXAxis() {
+		return mecanumDriveXAxis;
+	}
+
+	public double getMecanumDriveRotateAxis() {
+		return mecanumDriveRotateAxis;
 	}
 
 	public Toggle getDriveSwitchButton() {
